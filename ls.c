@@ -1,3 +1,5 @@
+#define _GNU_SOURCE
+
 #include <dirent.h>
 #include <errno.h>
 #include <stdio.h>
@@ -29,9 +31,9 @@ void print_with_color(struct dirent *entry) {
 }
 
 void ls_dir(const char *path) {
-  char *p = (path == NULL) ? "." : (char *)path;
+  char *dir_p = (path == NULL) ? "." : (char *)path;
 
-  DIR *dir = opendir(p);
+  DIR *dir = opendir(dir_p);
   if (dir == NULL) {
     perror("opendir");
     return;

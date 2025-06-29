@@ -1,0 +1,7 @@
+Checks: 'clang-analyzer-*,bugprone-*,readability-*,-bugprone-reserved-identifier'
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*'
+FormatStyle: file
+CheckOptions:
+  - key:             readability-magic-numbers.IgnoredValues
+    value:           '0,1,2'
