@@ -6,5 +6,5 @@
 
 # v0.0.2
 
-- [ ] Support file permissions
+- [X] Support file permissions
 - [ ] Support `ls`, `ls -l`, `ls -tree` commands
