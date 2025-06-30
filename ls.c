@@ -1,7 +1,6 @@
 // fancy_ls.c - A modern ls clone with colors, icons, -l, -a, and sorting
 
 #include <dirent.h>
-#include <errno.h>
 #include <grp.h>
 #include <locale.h>
 #include <pwd.h>
@@ -28,16 +27,26 @@
 
 // Icon selection
 const char *get_icon(const struct stat *st, const char *name) {
-  if (S_ISDIR(st->st_mode)) return "📁";     // 📁
-  if (S_ISLNK(st->st_mode)) return "🔗";     // 🔗
-  if (access(name, X_OK) == 0) return "🚀";  // 🚀
+  if (S_ISDIR(st->st_mode)) return " ";
+  if (S_ISLNK(st->st_mode)) return " ";
+  if (access(name, X_OK) == 0) return " ";
   const char *ext = strrchr(name, '.');
   if (ext) {
-    if (strcmp(ext, ".c") == 0) return "🧠";   // 🧠
-    if (strcmp(ext, ".md") == 0) return "📝";  // 📝
+    if (strcmp(ext, ".c") == 0) return " ";
+    if (strcmp(ext, ".md") == 0) return " ";
     if (strcmp(ext, ".json") == 0) return "{}";
+    if (strcmp(ext, ".py") == 0) return " ";
+    if (strcmp(ext, ".sh") == 0) return " ";
+    if (strcmp(ext, ".txt") == 0) return " ";
+    if (strcmp(ext, ".go") == 0) return " ";
+    if (strcmp(ext, ".html") == 0) return " ";
+    if (strcmp(ext, ".css") == 0) return " ";
+    if (strcmp(ext, ".js") == 0) return " ";
+    if (strcmp(ext, ".gif") == 0) return " ";
+    if (strcmp(ext, ".sql") == 0) return " ";
   }
-  return "📄";  // 📄
+  // Default icon for unknown types
+  return " ";  // Default icon for unknown types
 }
 
 // Color selection
@@ -47,7 +56,7 @@ const char *get_color(const struct stat *st, const char *name) {
   if (access(name, X_OK) == 0) return GREEN;
   const char *ext = strrchr(name, '.');
   if (ext && strcmp(ext, ".md") == 0) return MAGENTA;
-  return WHITE;
+  return YELLOW;
 }
 
 // Permissions
