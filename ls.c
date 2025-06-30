@@ -123,10 +123,24 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
   size_t maxlen = 0;
 
   while ((entry = readdir(dir)) != NULL) {
-    if (!show_hidden && entry->d_name[0] == '.') continue;
-    files[count] = strdup(entry->d_name);
+    if (!show_hidden && entry->d_name[0] == '.') {
+      continue;
+    }
+
+    char *name = NULL;
+    if (entry->d_type == DT_DIR) {
+      size_t len = strlen(entry->d_name) + 2;  // +1 for '/' +1 for '\0'
+      name = malloc(len);
+      sprintf(name, "%s/", entry->d_name);
+    } else {
+      name = strdup(entry->d_name);
+    }
+
+    files[count] = strdup(name);
     size_t len = strlen(entry->d_name);
-    if (len > maxlen) maxlen = len;
+    if (len > maxlen) {
+      maxlen = len;
+    }
     count++;
   }
   closedir(dir);
