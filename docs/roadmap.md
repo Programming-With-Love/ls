@@ -1,11 +1,11 @@
 # v0.0.1
 
 - [X] Add `clang-tidy` for code quality checks
-- [ ] Add github workflow
-- [ ] Add makefile for building
+- [X] Support file permissions and some meta
+- [X] Support `ls`, `ls -l` commands
+- [X] Support `ls -tree` commands
 
 # v0.0.2
 
-- [X] Support file permissions
-- [X] Support `ls`, `ls -l` commands
-- [ ] Support `ls -tree` commands
+- [ ] Add github workflow
+- [ ] Add makefile for building

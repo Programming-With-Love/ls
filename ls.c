@@ -1,4 +1,4 @@
-// fancy_ls.c - A modern ls clone with colors, icons, -l, -a, and sorting
+// ls.c - A modern ls clone with colors, icons, -l, -a, and sorting
 
 #include <dirent.h>
 #include <grp.h>
@@ -24,6 +24,7 @@
 #define YELLOW "\033[33m"
 #define RED "\033[31m"
 #define WHITE "\033[37m"
+#define LIGHT_BLUE "\033[94m"
 
 // Icon selection
 const char *get_icon(const struct stat *st, const char *name) {
@@ -108,7 +109,8 @@ int get_terminal_width() {
   return w.ws_col;
 }
 
-void list_dir(const char *path, int detailed, int show_hidden) {
+void list_dir(const char *path, int detailed, int show_hidden, int recursive,
+              int level) {
   DIR *dir = opendir(path);
   if (!dir) {
     perror("opendir");
@@ -132,6 +134,7 @@ void list_dir(const char *path, int detailed, int show_hidden) {
   qsort(files, count, sizeof(char *), cmp_by_name);
 
   if (detailed) {
+    // ls -l
     for (int i = 0; i < count; ++i) {
       char fullpath[MAX_PATH];
       snprintf(fullpath, sizeof(fullpath), "%s/%s", path, files[i]);
@@ -160,7 +163,8 @@ void list_dir(const char *path, int detailed, int show_hidden) {
              group, sizebuf, timebuf, icon, files[i], RESET);
       free(files[i]);
     }
-  } else {
+  } else if (!recursive) {
+    // just ls command
     int term_width = get_terminal_width();
     int col_width = (int)maxlen + 6;  // icon + spacing
     int cols = term_width / col_width;
@@ -190,23 +194,65 @@ void list_dir(const char *path, int detailed, int show_hidden) {
       free(files[i]);
     }
     if (current_col != 0) printf("\n");
+
+    return;
+  }
+
+  if (recursive) {
+    // ls -t
+    for (int i = 0; i < count; ++i) {
+      char fullpath[MAX_PATH];
+      snprintf(fullpath, sizeof(fullpath), "%s/%s", path, files[i]);
+      struct stat st;
+      if (lstat(fullpath, &st) == -1) {
+        perror("stat");
+        continue;
+      }
+
+      const char *icon = get_icon(&st, fullpath);
+      const char *color = get_color(&st, fullpath);
+
+      if (S_ISDIR(st.st_mode) && strcmp(files[i], ".") != 0 &&
+          strcmp(files[i], "..") != 0) {
+        // 树状连接线显示
+        for (int j = 0; j < level; j++) {
+          printf("  ");
+        }
+        printf("%s└── %s%s%s %s%s\n", LIGHT_BLUE, RESET, color, icon, files[i],
+               RESET);
+        list_dir(fullpath, detailed, show_hidden, recursive, level + 1);
+      } else {
+        // current file
+        for (int j = 0; j < level; j++) {
+          printf("  ");
+        }
+        printf("%s└── %s%s%s %s%s\n", LIGHT_BLUE, RESET, color, icon, files[i],
+               RESET);
+      }
+    }
   }
 }
 
 int main(int argc, char *argv[]) {
   setlocale(LC_ALL, "");
   const char *path = ".";
-  int detailed = 0, show_hidden = 0;
+  int detailed = 0, show_hidden = 0, recursive = 0;
 
   for (int i = 1; i < argc; i++) {
-    if (strcmp(argv[i], "-l") == 0)
+    if (strcmp(argv[i], "-l") == 0) {
       detailed = 1;
-    else if (strcmp(argv[i], "-a") == 0)
+    } else if (strcmp(argv[i], "-a") == 0) {
       show_hidden = 1;
-    else
+    } else if (strcmp(argv[i], "-t") == 0) {
+      recursive = 1;
+      // set detailed to 0 if -t is used
+      detailed = 0;
+      printf("\n");
+    } else {
       path = argv[i];
+    }
   }
 
-  list_dir(path, detailed, show_hidden);
+  list_dir(path, detailed, show_hidden, recursive, 0);
   return 0;
 }
