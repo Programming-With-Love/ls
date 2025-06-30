@@ -147,8 +147,8 @@ void list_dir(const char *path, int detailed, int show_hidden) {
       const char *user = pw ? pw->pw_name : "?";
       const char *group = gr ? gr->gr_name : "?";
 
-      printf("%s%-11s %-8s %-8s %8s %s %s %s %s\n", color, perm, user, group,
-             sizebuf, timebuf, icon, files[i], RESET);
+      printf("%s%-11s %-8s %-8s %-8s %-8s  %s %s %s\n", color, perm, user,
+             group, sizebuf, timebuf, icon, files[i], RESET);
       free(files[i]);
     }
   } else {
