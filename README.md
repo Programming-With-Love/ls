@@ -5,11 +5,11 @@ An alternative to ls command, Pure C language implementation
 
 ## Screenshots
 
-![screenshot1](docs/screenshot.png)
+![screenshot1](docs/screenshot.jpg)
 
-![screenshot2](docs/screenshot2.png)
+![screenshot2](docs/screenshot2.jpg)
 
-![screenshot3](docs/screenshot3.png)
+![screenshot3](docs/screenshot3.jpg)
 
 ## Usage
 
