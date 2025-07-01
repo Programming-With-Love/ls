@@ -24,12 +24,12 @@ make
 Then, you can run the command:
 
 ```bash
-./ls
+ls
 # or with options
-./ls -l
-./ls -a
-./ls -t
-./ls -l -a
+ls -l
+ls -a
+ls -t
+ls -l -a
 ```
 
 ## Contributing
