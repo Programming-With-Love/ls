@@ -7,5 +7,8 @@
 
 # v0.0.2
 
+- [X] Add makefile for building
+
+# v0.0.3
+
 - [ ] Add github workflow
-- [ ] Add makefile for building

@@ -259,12 +259,15 @@ int main(int argc, char *argv[]) {
       show_hidden = 1;
     } else if (strcmp(argv[i], "-t") == 0) {
       recursive = 1;
-      // set detailed to 0 if -t is used
-      detailed = 0;
       printf("\n");
     } else {
       path = argv[i];
     }
+  }
+
+  if (recursive) {
+    // -t should not show detailed info
+    detailed = 0;
   }
 
   list_dir(path, detailed, show_hidden, recursive, 0);

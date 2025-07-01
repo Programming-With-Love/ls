@@ -13,11 +13,13 @@ An alternative to ls command, Pure C language implementation
 
 ## Usage
 
-First, clone this repo and compile the code:
+First, clone this repo and run:
 
 ```bash
-gcc ls.c -o ls
+make
 ```
+
+*Tips: Make sure `.local/bin` is in your PATH variable*
 
 Then, you can run the command:
 
