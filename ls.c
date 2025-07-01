@@ -13,7 +13,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#define MAX_PATH 1024
+#define MAX_PATH 8192
 
 // ANSI Colors
 #define RESET "\033[0m"
@@ -118,7 +118,7 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
   }
 
   struct dirent *entry;
-  char *files[4096];
+  char *files[10240];
   int count = 0;
   size_t maxlen = 0;
 
@@ -226,8 +226,12 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
       const char *icon = get_icon(&st, fullpath);
       const char *color = get_color(&st, fullpath);
 
-      if (S_ISDIR(st.st_mode) && strcmp(files[i], ".") != 0 &&
-          strcmp(files[i], "..") != 0) {
+      if (strcmp(files[i], ".") == 0 && strcmp(files[i], "..") == 0) {
+        // Skip current and parent directories
+        continue;
+      }
+
+      if (S_ISDIR(st.st_mode)) {
         // 树状连接线显示
         for (int j = 0; j < level; j++) {
           printf("    ");
@@ -243,6 +247,8 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
         printf("%s└── %s%s%s %s%s\n", LIGHT_BLUE, RESET, color, icon, files[i],
                RESET);
       }
+
+      free(files[i]);
     }
   }
 }
@@ -268,6 +274,7 @@ int main(int argc, char *argv[]) {
   if (recursive) {
     // -t should not show detailed info
     detailed = 0;
+    show_hidden = 0;
   }
 
   list_dir(path, detailed, show_hidden, recursive, 0);
