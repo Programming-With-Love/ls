@@ -230,7 +230,7 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
           strcmp(files[i], "..") != 0) {
         // 树状连接线显示
         for (int j = 0; j < level; j++) {
-          printf("  ");
+          printf("    ");
         }
         printf("%s└── %s%s%s %s%s\n", LIGHT_BLUE, RESET, color, icon, files[i],
                RESET);
@@ -238,7 +238,7 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
       } else {
         // current file
         for (int j = 0; j < level; j++) {
-          printf("  ");
+          printf("    ");
         }
         printf("%s└── %s%s%s %s%s\n", LIGHT_BLUE, RESET, color, icon, files[i],
                RESET);
