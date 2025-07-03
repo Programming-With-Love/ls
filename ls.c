@@ -181,7 +181,7 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
     // just ls command
     int term_width = get_terminal_width();
     int col_width = (int)maxlen + 6;  // icon + spacing
-    int cols = term_width / col_width;
+    int cols = (term_width / col_width) - 2;
     int current_col = 0;
 
     for (int i = 0; i < count; ++i) {
@@ -201,13 +201,15 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
       printf("  %s%s %-*s%s", color, icon, col_width - 2, files[i], RESET);
 
       current_col++;
-      if (current_col >= cols) {
+      if ((current_col > cols)) {
         printf("\n");
         current_col = 0;
       }
       free(files[i]);
     }
-    if (current_col != 0) printf("\n");
+    if (current_col != 0) {
+      printf("\n");
+    }
 
     return;
   }
@@ -236,16 +238,16 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
         for (int j = 0; j < level; j++) {
           printf("    ");
         }
-        printf("  %s└── %s%s%s %s%s\n", LIGHT_BLUE, RESET, color, icon, files[i],
-               RESET);
+        printf("  %s└── %s%s%s %s%s\n", LIGHT_BLUE, RESET, color, icon,
+               files[i], RESET);
         list_dir(fullpath, detailed, show_hidden, recursive, level + 1);
       } else {
         // current file
         for (int j = 0; j < level; j++) {
           printf("    ");
         }
-        printf("  %s└── %s%s%s %s%s\n", LIGHT_BLUE, RESET, color, icon, files[i],
-               RESET);
+        printf("  %s└── %s%s%s %s%s\n", LIGHT_BLUE, RESET, color, icon,
+               files[i], RESET);
       }
 
       free(files[i]);
