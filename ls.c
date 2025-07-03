@@ -173,7 +173,7 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
       const char *user = pw ? pw->pw_name : "?";
       const char *group = gr ? gr->gr_name : "?";
 
-      printf("%s%-11s %-8s %-8s %-8s %-8s  %s %s %s\n", color, perm, user,
+      printf("  %s%-11s %-8s %-8s %-8s %-8s  %s %s %s\n", color, perm, user,
              group, sizebuf, timebuf, icon, files[i], RESET);
       free(files[i]);
     }
@@ -198,7 +198,7 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
       const char *icon = get_icon(&st, fullpath);
       const char *color = get_color(&st, fullpath);
 
-      printf("%s%s %-*s%s", color, icon, col_width - 2, files[i], RESET);
+      printf("  %s%s %-*s%s", color, icon, col_width - 2, files[i], RESET);
 
       current_col++;
       if (current_col >= cols) {
@@ -236,7 +236,7 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
         for (int j = 0; j < level; j++) {
           printf("    ");
         }
-        printf("%s└── %s%s%s %s%s\n", LIGHT_BLUE, RESET, color, icon, files[i],
+        printf("  %s└── %s%s%s %s%s\n", LIGHT_BLUE, RESET, color, icon, files[i],
                RESET);
         list_dir(fullpath, detailed, show_hidden, recursive, level + 1);
       } else {
@@ -244,7 +244,7 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
         for (int j = 0; j < level; j++) {
           printf("    ");
         }
-        printf("%s└── %s%s%s %s%s\n", LIGHT_BLUE, RESET, color, icon, files[i],
+        printf("  %s└── %s%s%s %s%s\n", LIGHT_BLUE, RESET, color, icon, files[i],
                RESET);
       }
 
