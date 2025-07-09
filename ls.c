@@ -17,11 +17,11 @@
 
 // ANSI Colors
 #define RESET "\033[0m"
-#define BLUE "\033[34m"
-#define GREEN "\033[32m"
+#define LIGHT_BLUE "\033[94m"
+#define LIGHT_GREEN "\033[92m"
 #define CYAN "\033[36m"
-#define MAGENTA "\033[35m"
-#define YELLOW "\033[33m"
+#define LIGHT_MAGENTA "\033[95m"
+#define LIGHT_YELLOW "\033[93m"
 #define RED "\033[31m"
 #define WHITE "\033[37m"
 #define LIGHT_BLUE "\033[94m"
@@ -30,7 +30,7 @@
 const char *get_icon(const struct stat *st, const char *name) {
   if (S_ISDIR(st->st_mode)) return " ";
   if (S_ISLNK(st->st_mode)) return " ";
-  if (access(name, X_OK) == 0) return " ";
+
   const char *ext = strrchr(name, '.');
   if (ext) {
     if (strcmp(ext, ".c") == 0) return " ";
@@ -40,24 +40,35 @@ const char *get_icon(const struct stat *st, const char *name) {
     if (strcmp(ext, ".sh") == 0) return " ";
     if (strcmp(ext, ".txt") == 0) return " ";
     if (strcmp(ext, ".go") == 0) return " ";
+    if (strcmp(ext, ".java") == 0) return " ";
+    if (strcmp(ext, ".toml") == 0 || strcmp(ext, ".yaml") == 0) return " ";
     if (strcmp(ext, ".html") == 0) return " ";
     if (strcmp(ext, ".css") == 0) return " ";
     if (strcmp(ext, ".js") == 0) return " ";
-    if (strcmp(ext, ".gif") == 0) return " ";
+    if (strcmp(ext, ".ts") == 0) return " ";
+    if (strcmp(ext, ".vue") == 0) return " ";
     if (strcmp(ext, ".sql") == 0) return " ";
+    if (strcmp(ext, ".png") == 0 || strcmp(ext, ".jpg") == 0 ||
+        strcmp(ext, ".jpeg") == 0 || strcmp(ext, ".gif") == 0) {
+      // Image files
+      return " ";
+    }
   }
+
+  // if (access(name, X_OK) == 0) return " ";
+
   // Default icon for unknown types
-  return " ";  // Default icon for unknown types
+  return " ";
 }
 
 // Color selection
 const char *get_color(const struct stat *st, const char *name) {
-  if (S_ISDIR(st->st_mode)) return BLUE;
+  if (S_ISDIR(st->st_mode)) return LIGHT_BLUE;
   if (S_ISLNK(st->st_mode)) return CYAN;
-  if (access(name, X_OK) == 0) return GREEN;
+  if (access(name, X_OK) == 0) return LIGHT_GREEN;
   const char *ext = strrchr(name, '.');
-  if (ext && strcmp(ext, ".md") == 0) return MAGENTA;
-  return YELLOW;
+  if (ext && strcmp(ext, ".md") == 0) return LIGHT_MAGENTA;
+  return LIGHT_YELLOW;
 }
 
 // Permissions
