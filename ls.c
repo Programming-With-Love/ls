@@ -192,8 +192,11 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
     // just ls command
     int term_width = get_terminal_width();
     int col_width = (int)maxlen + 6;  // icon + spacing
-    int cols = (term_width / col_width) - 1;
-    int current_col = 0;
+    int cols = term_width / col_width;
+    if (cols < 1) {
+      // Ensure at least one column
+      cols = 1;
+    }
 
     for (int i = 0; i < count; ++i) {
       char fullpath[MAX_PATH];
@@ -209,21 +212,15 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
       const char *icon = get_icon(&st, fullpath);
       const char *color = get_color(&st, fullpath);
 
-      if (current_col < cols) {
-        // print in columns
-        printf("  %s%s %-*s%s", color, icon, (int)maxlen + 1, files[i], RESET);
-        current_col++;
-      }
+      printf("  %s%s %-*s%s", color, icon, (int)maxlen + 1, files[i], RESET);
 
-      if (current_col >= cols) {
-        // print new line after filling columns
+      if ((i + 1) % cols == 0) {
         printf("\n");
-        current_col = 0;
       }
 
       free(files[i]);
     }
-    if (current_col != 0) {
+    if (count % cols != 0) {
       printf("\n");
     }
 
