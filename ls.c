@@ -152,9 +152,15 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
     if (len > maxlen) {
       maxlen = len;
     }
+
     count++;
   }
   closedir(dir);
+
+  if (count == 0) {
+    printf("  %sNothing to show%s\n", LIGHT_YELLOW, RESET);
+    return;
+  }
 
   qsort(files, count, sizeof(char *), cmp_by_name);
 
