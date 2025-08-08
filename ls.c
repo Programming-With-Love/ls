@@ -28,26 +28,43 @@
 
 // Icon selection
 const char *get_icon(const struct stat *st, const char *name) {
-  if (S_ISDIR(st->st_mode)) return " ";
-  if (S_ISLNK(st->st_mode)) return " ";
+  if (S_ISDIR(st->st_mode))
+    return " ";
+  if (S_ISLNK(st->st_mode))
+    return " ";
 
   const char *ext = strrchr(name, '.');
   if (ext) {
-    if (strcmp(ext, ".c") == 0) return " ";
-    if (strcmp(ext, ".md") == 0) return " ";
-    if (strcmp(ext, ".json") == 0) return "{}";
-    if (strcmp(ext, ".py") == 0) return " ";
-    if (strcmp(ext, ".sh") == 0) return " ";
-    if (strcmp(ext, ".txt") == 0) return " ";
-    if (strcmp(ext, ".go") == 0) return " ";
-    if (strcmp(ext, ".java") == 0) return " ";
-    if (strcmp(ext, ".toml") == 0 || strcmp(ext, ".yaml") == 0) return " ";
-    if (strcmp(ext, ".html") == 0) return " ";
-    if (strcmp(ext, ".css") == 0) return " ";
-    if (strcmp(ext, ".js") == 0) return " ";
-    if (strcmp(ext, ".ts") == 0) return " ";
-    if (strcmp(ext, ".vue") == 0) return " ";
-    if (strcmp(ext, ".sql") == 0) return " ";
+    if (strcmp(ext, ".c") == 0)
+      return " ";
+    if (strcmp(ext, ".md") == 0)
+      return " ";
+    if (strcmp(ext, ".json") == 0)
+      return "{}";
+    if (strcmp(ext, ".py") == 0)
+      return " ";
+    if (strcmp(ext, ".sh") == 0)
+      return " ";
+    if (strcmp(ext, ".txt") == 0)
+      return " ";
+    if (strcmp(ext, ".go") == 0)
+      return " ";
+    if (strcmp(ext, ".java") == 0)
+      return " ";
+    if (strcmp(ext, ".toml") == 0 || strcmp(ext, ".yaml") == 0)
+      return " ";
+    if (strcmp(ext, ".html") == 0)
+      return " ";
+    if (strcmp(ext, ".css") == 0)
+      return " ";
+    if (strcmp(ext, ".js") == 0)
+      return " ";
+    if (strcmp(ext, ".ts") == 0)
+      return " ";
+    if (strcmp(ext, ".vue") == 0)
+      return " ";
+    if (strcmp(ext, ".sql") == 0)
+      return " ";
     if (strcmp(ext, ".png") == 0 || strcmp(ext, ".jpg") == 0 ||
         strcmp(ext, ".jpeg") == 0 || strcmp(ext, ".gif") == 0) {
       // Image files
@@ -63,11 +80,15 @@ const char *get_icon(const struct stat *st, const char *name) {
 
 // Color selection
 const char *get_color(const struct stat *st, const char *name) {
-  if (S_ISDIR(st->st_mode)) return LIGHT_BLUE;
-  if (S_ISLNK(st->st_mode)) return CYAN;
-  if (access(name, X_OK) == 0) return LIGHT_GREEN;
+  if (S_ISDIR(st->st_mode))
+    return LIGHT_BLUE;
+  if (S_ISLNK(st->st_mode))
+    return CYAN;
+  if (access(name, X_OK) == 0)
+    return LIGHT_GREEN;
   const char *ext = strrchr(name, '.');
-  if (ext && strcmp(ext, ".md") == 0) return LIGHT_MAGENTA;
+  if (ext && strcmp(ext, ".md") == 0)
+    return LIGHT_MAGENTA;
   return LIGHT_YELLOW;
 }
 
@@ -116,7 +137,8 @@ int cmp_by_name(const void *a, const void *b) {
 
 int get_terminal_width() {
   struct winsize w;
-  if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == -1) return 80;
+  if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == -1)
+    return 80;
   return w.ws_col;
 }
 
@@ -140,7 +162,7 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
 
     char *name = NULL;
     if (entry->d_type == DT_DIR) {
-      size_t len = strlen(entry->d_name) + 2;  // +1 for '/' +1 for '\0'
+      size_t len = strlen(entry->d_name) + 2; // +1 for '/' +1 for '\0'
       name = malloc(len);
       sprintf(name, "%s/", entry->d_name);
     } else {
@@ -197,7 +219,7 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
   } else if (!recursive) {
     // just ls command
     int term_width = get_terminal_width();
-    int col_width = (int)maxlen + 6;  // icon + spacing
+    int col_width = (int)maxlen + 6; // icon + spacing
     int cols = term_width / col_width;
     if (cols < 1) {
       // Ensure at least one column
