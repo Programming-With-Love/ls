@@ -219,10 +219,35 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
   } else if (!recursive) {
     // just ls command
     int term_width = get_terminal_width();
-    int col_width = (int)maxlen + 6; // icon + spacing
+
+    // 计算每个条目的实际显示宽度（包括图标和文件名，不包括ANSI颜色代码）
+    size_t display_widths[10240];
+    size_t max_display_width = 0;
+
+    for (int i = 0; i < count; ++i) {
+      char fullpath[MAX_PATH];
+      snprintf(fullpath, sizeof(fullpath), "%s/%s", path, files[i]);
+
+      struct stat st;
+      if (lstat(fullpath, &st) == -1) {
+        perror("stat");
+        display_widths[i] = strlen(files[i]) + 2; // 图标+文件名
+        continue;
+      }
+
+      const char *icon = get_icon(&st, fullpath);
+      size_t icon_width = strlen(icon);
+      size_t name_width = strlen(files[i]);
+      display_widths[i] = icon_width + name_width;
+
+      if (display_widths[i] > max_display_width) {
+        max_display_width = display_widths[i];
+      }
+    }
+
+    int col_width = (int)max_display_width + 3; // 额外间距
     int cols = term_width / col_width;
     if (cols < 1) {
-      // Ensure at least one column
       cols = 1;
     }
 
@@ -240,7 +265,9 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
       const char *icon = get_icon(&st, fullpath);
       const char *color = get_color(&st, fullpath);
 
-      printf("  %s%s %-*s%s", color, icon, (int)maxlen + 1, files[i], RESET);
+      // 使用统一列宽，确保上下对齐
+      printf("  %s%s %-*s%s", color, icon,
+             (int)(max_display_width - strlen(icon) + 1), files[i], RESET);
 
       if ((i + 1) % cols == 0) {
         printf("\n");
