@@ -179,7 +179,7 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
   }
   closedir(dir);
 
-  if (count == 0) {
+  if (count == 0 && !recursive) {
     printf("  %sNothing to show%s\n", LIGHT_YELLOW, RESET);
     return;
   }

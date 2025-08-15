@@ -1,4 +1,4 @@
-# ls [![](https://img.shields.io/badge/tag-v0.0.8-green.svg)](https://img.shields.io/badge/tag-v0.0.8-green)
+# ls [![](https://img.shields.io/badge/tag-v0.0.9-green.svg)](https://img.shields.io/badge/tag-v0.0.9-green)
 
 
 An alternative to ls command, Pure C language implementation
