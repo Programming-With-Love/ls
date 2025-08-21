@@ -326,7 +326,9 @@ void list_dir(const char *path, int detailed, int show_hidden, int recursive,
 int main(int argc, char *argv[]) {
   setlocale(LC_ALL, "");
   const char *path = ".";
-  int detailed = 0, show_hidden = 0, recursive = 0;
+  int detailed = 0;
+  int show_hidden = 0;
+  int recursive = 0;
 
   for (int i = 1; i < argc; i++) {
     if (strcmp(argv[i], "-l") == 0) {
@@ -336,9 +338,10 @@ int main(int argc, char *argv[]) {
     } else if (strcmp(argv[i], "-t") == 0) {
       recursive = 1;
       printf("\n");
-    } else {
+    } else if (argv[i][0] != '-') {
       path = argv[i];
     }
+    // Ignore unknown flags like -F
   }
 
   if (recursive) {
